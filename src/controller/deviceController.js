@@ -655,7 +655,9 @@ export async function starMessage(req, res) {
 export async function chatWoot(req, res) {
   const { session } = req.params;
   const client = clientsArray[session];
-  if (client == null || client.status !== 'CONNECTED') return;
+  if (client == null || client.status !== 'CONNECTED') {
+    return res.status(400).json({ status: 'error', message: `Session ${session} disconnected` });
+  }
   try {
     if (await client.isConnected()) {
       const event = req.body.event;
